@@ -3,7 +3,7 @@ Shader "LTCGI/LV Apply (Blit)"
     Properties
     {
         _MainTex ("Base", 3D) = "black" {}
-        _Directionality ("Directionality", Range(0.0, 1.0)) = 0.66
+        _Directionality ("Directionality", Range(0.0, 2.0)) = 1.0
     }
     SubShader
     {
@@ -15,7 +15,7 @@ Shader "LTCGI/LV Apply (Blit)"
             Name "LTCGI LV Apply"
 
             CGPROGRAM
-            #define LTCGI_FAST_SAMPLING
+            //#define LTCGI_FAST_SAMPLING
             #include "UnityCustomRenderTexture.cginc"
             //#include "Packages/red.sim.lightvolumes/Shaders/LightVolumes.cginc" // open coded
             #include "Packages/at.pimaker.ltcgi/Shaders/LTCGI.cginc"
@@ -131,7 +131,7 @@ Shader "LTCGI/LV Apply (Blit)"
                     float3x3 identityBrdf = float3x3(float3(T1), float3(T2), float3(worldNorm));
 
                     ltcgi_output diff;
-                    LTCGI_Evaluate(input, identityBrdf, 0, false, diff);
+                    LTCGI_Evaluate(input, identityBrdf, 0, true, diff);
 
                     float l0ch = flags.lmch == 0 ? 1 : L0b[flags.lmch - 1];
                     float3 l1ch;
@@ -143,12 +143,28 @@ Shader "LTCGI/LV Apply (Blit)"
                         default: l1ch = 0; break; // no channel (or 0 aka "off"), skips L1
                     }
 
-                    float3 output = diff.color; // * diff.intensity; - Intensity is baked by LV
-                    float l1dir = saturate(_Directionality - diff.intensity * 0.66f);
-                    L0 += max(0, l0ch * output.rgb * saturate(diff.intensity + 0.5f));
-                    L1r += max(0, l1ch * output.r * l1dir);
-                    L1g += max(0, l1ch * output.g * l1dir);
-                    L1b += max(0, l1ch * output.b * l1dir);
+                    if (flags.lmdOnly)
+                    {
+                        // hack to make lightmap-only lights have smooter falloff, since diff.intensity will always be 0
+                        l0ch = min(1, l0ch * l0ch);
+                        diff.intensity = 1;
+                    }
+
+                    float3 output = diff.color * diff.intensity;
+                    float3 rgbL0 = max(0, l0ch) * output;
+
+                    float safeL0 = max(abs(l0ch), 1e-4);
+                    float3 l1Basis = l1ch / safeL0;
+
+                    l1Basis *= _Directionality;
+                    float lenL1 = length(l1Basis);
+                    if (lenL1 > 0.98)
+                        l1Basis *= 0.98 / lenL1;
+
+                    L0 += rgbL0;
+                    L1r += l1Basis * rgbL0.r;
+                    L1g += l1Basis * rgbL0.g;
+                    L1b += l1Basis * rgbL0.b;
                 }
             }
 
