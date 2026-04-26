@@ -145,7 +145,7 @@ Shader "LTCGI/LV Apply (Blit)"
 
                     float3 output = diff.color; // * diff.intensity; - Intensity is baked by LV
                     float l1dir = saturate(_Directionality - diff.intensity * 0.66f);
-                    L0 += max(0, l0ch * output.rgb);
+                    L0 += max(0, l0ch * output.rgb * saturate(diff.intensity + 0.5f));
                     L1r += max(0, l1ch * output.r * l1dir);
                     L1g += max(0, l1ch * output.g * l1dir);
                     L1b += max(0, l1ch * output.b * l1dir);
