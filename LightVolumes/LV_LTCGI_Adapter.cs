@@ -3,12 +3,15 @@
 using System;
 using System.Collections.Generic;
 using UdonSharp;
-using UdonSharpEditor;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using VRCLightVolumes;
 using VRC.Udon;
+
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+using UdonSharpEditor;
+#endif
 
 #if UDONSHARP
 using VRC.SDKBase;
