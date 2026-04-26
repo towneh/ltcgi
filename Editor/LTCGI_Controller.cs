@@ -539,7 +539,7 @@ namespace pi.LTCGI
                 // float[][] doesn't serialize in normal Unity, so linearize it
                 adapter._LTCGI_Mask =
                     Enumerable.Range(0, adapter._Renderers.Length)
-                    .SelectMany(i => mask2d[i])
+                    .SelectMany(i => mask2d[i].Concat(Enumerable.Repeat(1.0f, MAX_SOURCES - screens.Length)))
                     .ToArray();
                 // mask is reversed! 1 = not visible, 0 = visible - avatar mask is global and must be of length MAX_SOURCES
                 var avatarMask = screens.Select(x => x.AffectAvatars ? 0.0f : 1.0f);

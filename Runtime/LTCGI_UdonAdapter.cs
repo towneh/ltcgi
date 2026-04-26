@@ -134,7 +134,7 @@ public class LTCGI_UdonAdapter : MonoBehaviour
             GlobalShader.SetGlobalTexture(GlobalShader.PropertyToID("_Udon_LTCGI_Lightmap"), _LTCGI_DefaultLightmap);
 
         // Set per world-renderer overrides
-        var maskSubset = new float[_LTCGI_ScreenCount];
+        var maskSubset = new float[maxScreens];
         for (int i = 0; i < _Renderers.Length; i++)
         {
             var r = _Renderers[i];
@@ -142,7 +142,7 @@ public class LTCGI_UdonAdapter : MonoBehaviour
             if (r.HasPropertyBlock())
                 r.GetPropertyBlock(block);
 
-            Array.Copy(_LTCGI_Mask, i * _LTCGI_ScreenCount, maskSubset, 0, _LTCGI_ScreenCount);
+            Array.Copy(_LTCGI_Mask, i * maxScreens, maskSubset, 0, maxScreens);
             block.SetFloatArray("_Udon_LTCGI_Mask", maskSubset);
             block.SetInt("_Udon_LTCGI_ScreenCount", _LTCGI_ScreenCountMasked[i]);
 
