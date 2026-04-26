@@ -17,7 +17,7 @@ namespace pi.LTCGI
     [CustomEditor(typeof(LTCGI_Controller))]
     public class LTCGI_ControllerEditor : Editor
     {
-        const string VERSION = "v1.0.2";
+        public const string VERSION = "v1.0.2";
 
         private static readonly string[] CONFIGURATION_PROPS = new[] {
             #if UNITY_STANDALONE
@@ -30,7 +30,7 @@ namespace pi.LTCGI
             "LightmapMultiplier"
         };
 
-        private static Texture Logo;
+        public static Lazy<Texture> Logo = new Lazy<Texture>(() => Resources.Load("LTCGI-LogoController") as Texture);
 
         private bool debugFoldout = false;
 
@@ -46,8 +46,6 @@ namespace pi.LTCGI
 
         public void OnEnable()
         {
-            Logo = Resources.Load("LTCGI-LogoController") as Texture;
-
             if (configChangedValues != null)
             {
                 configChangedValues.Clear();
@@ -61,7 +59,7 @@ namespace pi.LTCGI
             GUIStyle style = new GUIStyle(EditorStyles.label);
             style.alignment = TextAnchor.MiddleCenter;
             style.fixedHeight = 150;
-            GUI.Box(GUILayoutUtility.GetRect(300, 150, style), Logo, style);
+            GUI.Box(GUILayoutUtility.GetRect(300, 150, style), Logo.Value, style);
 
             var rightAlignedLabel = new GUIStyle(EditorStyles.label);
             rightAlignedLabel.alignment = TextAnchor.MiddleRight;

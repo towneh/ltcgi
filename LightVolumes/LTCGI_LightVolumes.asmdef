@@ -1,0 +1,32 @@
+{
+    "name": "LTCGI_LightVolumes",
+    "rootNamespace": "",
+    "references": [
+        "VRC.Udon",
+        "UdonSharp.Runtime",
+        "UdonSharp.Editor",
+        "VRC.Udon.Serialization.OdinSerializer",
+        "red.sim.LightVolumes",
+        "red.sim.LightVolumesEditor",
+        "red.sim.LightVolumesUdon",
+        "LTCGI_Assembly",
+        "at.pimaker.ltcgi.Editor"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

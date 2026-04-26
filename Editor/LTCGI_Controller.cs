@@ -545,7 +545,10 @@ namespace pi.LTCGI
                 // mask is reversed! 1 = not visible, 0 = visible - avatar mask is global and must be of length MAX_SOURCES
                 var avatarMask = screens.Select(x => x.AffectAvatars ? 0.0f : 1.0f);
                 avatarMask = avatarMask.Concat(Enumerable.Repeat(1.0f, MAX_SOURCES - screens.Length));
+                var lvMask = screens.Select(x => x.AffectLightVolumesActive ? 0.0f : 1.0f);
+                lvMask = lvMask.Concat(Enumerable.Repeat(1.0f, MAX_SOURCES - screens.Length));
                 adapter._LTCGI_MaskAvatars = avatarMask.ToArray();
+                adapter._LTCGI_MaskLVs = lvMask.ToArray();
                 adapter._Screens = screens.Select(x => x != null ? x.gameObject : null).ToArray();
                 adapter._LTCGI_LODs = new Texture[4];
                 adapter._LTCGI_LODs[0] = VideoTexture;
@@ -601,6 +604,7 @@ namespace pi.LTCGI
                         Math.Max(adapter._LTCGI_ScreenCountDynamic,
                             Array.FindLastIndex(mask, m => m == 0.0f) + 1)).ToArray();
                 adapter._LTCGI_ScreenCountMaskedAvatars = Array.FindLastIndex(screens, x => x.AffectAvatars) + 1;
+                adapter._LTCGI_ScreenCountMaskedLVs = Array.FindLastIndex(screens, x => x.AffectLightVolumesActive) + 1;
                 if (FastSampling)
                     adapter.BlurCRTInput = null;
                 else

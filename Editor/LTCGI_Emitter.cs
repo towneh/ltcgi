@@ -81,6 +81,8 @@ namespace pi.LTCGI
                 EditorGUILayout.HelpBox("This emitter is not using a lightmap channel. It will not look correct.", MessageType.Warning);
             }
 
+            DrawLVSelector(DiffMode.LightmapDiffuse);
+
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 

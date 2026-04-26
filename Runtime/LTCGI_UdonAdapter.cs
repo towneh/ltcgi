@@ -27,6 +27,7 @@ public class LTCGI_UdonAdapter : MonoBehaviour
     public Vector4[] _LTCGI_LightmapST;
     public float[] _LTCGI_Mask;
     public float[] _LTCGI_MaskAvatars;
+    public float[] _LTCGI_MaskLVs;
     public Vector4 _LTCGI_LightmapMult;
     public GameObject[] _Screens;
     public Texture2D _LTCGI_lut1, _LTCGI_lut2;
@@ -42,6 +43,7 @@ public class LTCGI_UdonAdapter : MonoBehaviour
     public Transform[] _LTCGI_ScreenTransforms;
     public int _LTCGI_ScreenCount;
     public int _LTCGI_ScreenCountMaskedAvatars;
+    public int _LTCGI_ScreenCountMaskedLVs;
     public int[] _LTCGI_ScreenCountMasked;
     public int _LTCGI_ScreenCountDynamic;
     public CustomRenderTexture BlurCRTInput;
@@ -120,10 +122,13 @@ public class LTCGI_UdonAdapter : MonoBehaviour
         GlobalShader.SetGlobalTexture(GlobalShader.PropertyToID("_Udon_LTCGI_lut2"), _LTCGI_lut2);
 
         GlobalShader.SetGlobalFloatArray(GlobalShader.PropertyToID("_Udon_LTCGI_Mask"), _LTCGI_MaskAvatars);
+        GlobalShader.SetGlobalFloatArray(GlobalShader.PropertyToID("_Udon_LTCGI_Mask_LVs"), _LTCGI_MaskLVs);
         #if COMPILER_UDONSHARP
         GlobalShader.SetGlobalInteger(GlobalShader.PropertyToID("_Udon_LTCGI_ScreenCount"), _LTCGI_ScreenCountMaskedAvatars);
+        GlobalShader.SetGlobalInteger(GlobalShader.PropertyToID("_Udon_LTCGI_ScreenCount_LVs"), _LTCGI_ScreenCountMaskedLVs);
         #else
         GlobalShader.SetGlobalInt(GlobalShader.PropertyToID("_Udon_LTCGI_ScreenCount"), _LTCGI_ScreenCountMaskedAvatars);
+        GlobalShader.SetGlobalInt(GlobalShader.PropertyToID("_Udon_LTCGI_ScreenCount_LVs"), _LTCGI_ScreenCountMaskedLVs);
         #endif
 
         _SetGlobalState(true);

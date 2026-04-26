@@ -54,7 +54,12 @@ namespace pi.LTCGI
         public float CylinderAngle;
 
         [Tooltip("If this renderer should affect avatars that use a supported LTCGI shader.")]
-        public bool AffectAvatars = true;
+        public bool AffectAvatars = false;
+
+        [Tooltip("If enabled, this screen will be rendered into 'Light Volume LTCGI' instances. Use this over 'Affect Avatars' if possible. This has no effect if VRC Light Volumes is not installed or set up.")]
+        public bool AffectLightVolumes = true;
+
+        public bool AffectLightVolumesActive => AffectLightVolumes && LightmapChannel != 0 && DiffuseFromLm;
 
         private Vector3 prevPos, prevScale, prevRot;
 
@@ -155,7 +160,7 @@ namespace pi.LTCGI
     [CanEditMultipleObjects]
     public class LTCGI_ScreenEditor : Editor
     {
-        protected SerializedProperty colorProp, sidedProp, dynamicProp, indexProp, colormodeProp, specProp, diffProp, lmProp, singleUVProp, rendererModeProp, rendererListProp, rendererDistProp, diffModeProp, diffuseFromLmProp, flipProp, lmIntensProp, alBandProp, alDelayProp, affectAvatarsProp;
+        protected SerializedProperty colorProp, sidedProp, dynamicProp, indexProp, colormodeProp, specProp, diffProp, lmProp, singleUVProp, rendererModeProp, rendererListProp, rendererDistProp, diffModeProp, diffuseFromLmProp, flipProp, lmIntensProp, alBandProp, alDelayProp, affectAvatarsProp, affectLVsProp;
         protected SerializedProperty cylProp, cylBaseProp, cylHeightProp, cylAngleProp, cylRadiusProp, cylSizeProp;
 
         protected static Texture Logo;
@@ -196,6 +201,7 @@ namespace pi.LTCGI
             alBandProp = serializedObject.FindProperty("AudioLinkBand");
             alDelayProp = serializedObject.FindProperty("AudioLinkDelay");
             affectAvatarsProp = serializedObject.FindProperty("AffectAvatars");
+            affectLVsProp = serializedObject.FindProperty("AffectLightVolumes");
 
             cylProp = serializedObject.FindProperty("Cylinder");
             cylAngleProp = serializedObject.FindProperty("CylinderAngle");
@@ -334,6 +340,8 @@ namespace pi.LTCGI
                 EditorGUILayout.PropertyField(affectAvatarsProp);
             #endif
 
+            DrawLVSelector(dm);
+
             EditorGUILayout.Separator();
             DrawColorModeSelector(true);
             EditorGUILayout.Separator();
@@ -345,6 +353,21 @@ namespace pi.LTCGI
             {
                 serializedObject.ApplyModifiedProperties();
                 LTCGI_Controller.Singleton?.UpdateMaterials();
+            }
+        }
+
+        protected void DrawLVSelector(DiffMode dm)
+        {
+            if (dm == DiffMode.LightmapDiffuse && lmProp.intValue != 0)
+            {
+                EditorGUILayout.PropertyField(affectLVsProp);
+            }
+            else
+            {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.PropertyField(affectLVsProp);
+                EditorGUILayout.HelpBox("This option is only relevant if 'Diffuse from Lightmap' mode is enabled and a lightmap channel is selected.", MessageType.None);
+                EditorGUI.EndDisabledGroup();
             }
         }
 
