@@ -107,7 +107,7 @@ namespace pi.LTCGI
                     {
                         bakeMaterialReset_key.Add(m);
                         bakeMaterialReset_val.Add(m.globalIlluminationFlags);
-                        m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+                        m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
                     }
                 }
             }
@@ -204,9 +204,24 @@ namespace pi.LTCGI
                     else
                     #endif
                     {
+                        if (allowStaticBatching)
+                        {
+                            foreach (var origMat in rend.sharedMaterials)
+                            {
+                                if (origMat != null)
+                                {
+                                    // force GI flag to avoid changing atlas layout
+                                    origMat.globalIlluminationFlags |= MaterialGlobalIlluminationFlags.BakedEmissive;
+                                }
+                            }
+                        }
+
                         r.ResetData = true;
                         r.Materials = rend.sharedMaterials;
-                        r.Flags = flags;
+                        if (allowStaticBatching)
+                            r.Flags = flags | StaticEditorFlags.ContributeGI; // keep GI flag to avoid changing atlas layout
+                        else
+                            r.Flags = flags;
                         r.ShadowCastingMode = rend.shadowCastingMode;
                         if (rend.shadowCastingMode == ShadowCastingMode.Off || rend.shadowCastingMode == ShadowCastingMode.ShadowsOnly)
                         {
