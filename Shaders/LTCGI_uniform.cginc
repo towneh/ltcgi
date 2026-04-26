@@ -74,6 +74,7 @@ uniform bool _Udon_LTCGI_Mask[MAX_SOURCES];
 //   b12=cylinder
 //   b13-14=audio link band
 //   b15=lightmap diffuse only
+//   b16-22=audio link delay
 // (color black = fully disabled)
 uniform float4 _Udon_LTCGI_ExtraData[MAX_SOURCES];
 
@@ -104,6 +105,7 @@ ltcgi_flags ltcgi_parse_flags(uint val, bool noLmDiff)
 
     #ifdef LTCGI_AUDIOLINK
     ret.alBand      = (val & 0x6000) >> 13;
+    ret.alDelay     = (val & 0x7F0000) >> 16;
     #endif
 
     ret.lmdOnly     = (val & (1 << 15)) == (1 << 15);

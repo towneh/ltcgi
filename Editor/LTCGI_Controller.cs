@@ -382,6 +382,7 @@ namespace pi.LTCGI
                 flags |= ((uint)s.LightmapChannel & 0x3) << 10;
                 if (s.Cylinder) flags |= (1<<12);
                 flags |= ((uint)s.AudioLinkBand & 0x3) << 13;
+                flags |= ((uint)s.AudioLinkDelay & 0x7F) << 16;
                 if (s is LTCGI_Emitter) flags |= (1<<15); // TODO: can this be set based on other flags?
 
                 var col = s.enabled && s.gameObject.activeInHierarchy ? s.Color : Color.black;

@@ -17,6 +17,7 @@ struct ltcgi_flags
     uint lmch, lmidx; // lightmap channel and index
     bool cylinder; // is this light a cylinder
     uint alBand; // audiolink band if colormode == LTCGI_COLORMODE_AUDIOLINK
+    uint alDelay; // audiolink delay in frames if colormode == LTCGI_COLORMODE_AUDIOLINK
     bool lmdOnly; // if this light is lightmap-diffuse _only_, that is, no LTC will be run (Lw will be all 0 in that case) - this will never be true on avatars (with LTCGI_ALWAYS_LTC_DIFFUSE)
 };
 

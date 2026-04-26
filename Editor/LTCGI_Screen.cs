@@ -34,6 +34,9 @@ namespace pi.LTCGI
         [Range(0, 3)]
         public int AudioLinkBand;
 
+        [Range(0, 127)]
+        public int AudioLinkDelay = 0;
+
         [Tooltip("Workaround for some Blender imports. Try to enable it if you notice your reflection is sideways.")]
         public bool FlipUV;
 
@@ -152,7 +155,7 @@ namespace pi.LTCGI
     [CanEditMultipleObjects]
     public class LTCGI_ScreenEditor : Editor
     {
-        protected SerializedProperty colorProp, sidedProp, dynamicProp, indexProp, colormodeProp, specProp, diffProp, lmProp, singleUVProp, rendererModeProp, rendererListProp, rendererDistProp, diffModeProp, diffuseFromLmProp, flipProp, lmIntensProp, alBandProp, affectAvatarsProp;
+        protected SerializedProperty colorProp, sidedProp, dynamicProp, indexProp, colormodeProp, specProp, diffProp, lmProp, singleUVProp, rendererModeProp, rendererListProp, rendererDistProp, diffModeProp, diffuseFromLmProp, flipProp, lmIntensProp, alBandProp, alDelayProp, affectAvatarsProp;
         protected SerializedProperty cylProp, cylBaseProp, cylHeightProp, cylAngleProp, cylRadiusProp, cylSizeProp;
 
         protected static Texture Logo;
@@ -191,6 +194,7 @@ namespace pi.LTCGI
             lmIntensProp = serializedObject.FindProperty("LightmapIntensity");
             flipProp = serializedObject.FindProperty("FlipUV");
             alBandProp = serializedObject.FindProperty("AudioLinkBand");
+            alDelayProp = serializedObject.FindProperty("AudioLinkDelay");
             affectAvatarsProp = serializedObject.FindProperty("AffectAvatars");
 
             cylProp = serializedObject.FindProperty("Cylinder");
@@ -425,6 +429,7 @@ namespace pi.LTCGI
                         EditorGUILayout.PropertyField(alBandProp);
                         string[] bandNames = new[] {"Bass", "Low Mids", "High Mids", "Treble"};
                         EditorGUILayout.HelpBox($"Selected Band: {bandNames[alBandProp.intValue]}", MessageType.None, false);
+                        EditorGUILayout.PropertyField(alDelayProp);
                         break;
                 }
             }

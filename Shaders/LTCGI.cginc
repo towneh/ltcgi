@@ -71,7 +71,7 @@ void LTCGI_Evaluate(ltcgi_input input, float3x3 Minv, float roughness, const boo
     #ifdef LTCGI_AUDIOLINK
         [branch]
         if (input.flags.colormode == LTCGI_COLORMODE_AUDIOLINK) {
-            float al = lerp(0, AudioLinkLerp(ALPASS_AUDIOLINK + float2(0, (int)input.flags.alBand)).r, AudioLinkIsAvailable());
+            float al = lerp(0, AudioLinkLerp(ALPASS_AUDIOLINK + float2(input.flags.alDelay, input.flags.alBand)).r, AudioLinkIsAvailable());
             output.color *= al;
 
             RET1_IF_LMDIFF
