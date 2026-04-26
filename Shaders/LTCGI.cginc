@@ -282,7 +282,7 @@ void LTCGI_Contribution(
 
         // skip single-sided lights that face the other way
         float3 screenNorm = cross(Lw[1] - Lw[0], Lw[2] - Lw[0]);
-        if (!flags.doublesided) {
+        if (!flags.doublesided && !flags.diffFromLm) {
             if (dot(screenNorm, Lw[0]) < 0)
                 continue;
         }
@@ -332,6 +332,11 @@ void LTCGI_Contribution(
 
         // specular lighting
         #ifndef LTCGI_SPECULAR_OFF
+            if (!flags.doublesided) {
+                if (dot(screenNorm, Lw[0]) < 0)
+                    continue;
+            }
+
             [branch]
             if (flags.specular)
             {
