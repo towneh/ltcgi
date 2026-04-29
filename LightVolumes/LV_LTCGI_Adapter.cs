@@ -1,4 +1,4 @@
-﻿#if VRC_LIGHT_VOLUMES
+﻿#if VRC_LIGHT_VOLUMES && UDONSHARP && VRC_SDK_VRCSDK3
 
 using System;
 using System.Collections.Generic;
@@ -7,16 +7,11 @@ using UnityEngine;
 using UnityEditor;
 using VRCLightVolumes;
 using VRC.Udon;
+using VRC.SDKBase;
 
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 using UdonSharpEditor;
-#endif
-
-#if UDONSHARP
-using VRC.SDKBase;
-#else
-using VRCShader = UnityEngine.Shader;
 #endif
 
 namespace pi.LTCGI.LVAdapter
@@ -308,4 +303,4 @@ namespace pi.LTCGI.LVAdapter
 #endif
 }
 
-#endif
+#endif // VRC_LIGHT_VOLUMES && UDONSHARP && VRC_SDK_VRCSDK3
